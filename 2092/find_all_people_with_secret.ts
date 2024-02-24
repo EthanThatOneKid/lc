@@ -55,15 +55,15 @@ function findAllPeople(
     };
 
     for (const [p1, p2] of group) {
-      if (secretClub.has(p1) || secretClub.has(p2)) {
-        secretClub.add(p1);
-        secretClub.add(p2);
-
-        resolveBacktrack(p1);
-        resolveBacktrack(p2);
-      } else {
+      if (!secretClub.has(p1) && !secretClub.has(p2)) {
         addBacktrack(p1, p2);
+        continue;
       }
+
+      secretClub.add(p1);
+      secretClub.add(p2);
+      resolveBacktrack(p1);
+      resolveBacktrack(p2);
     }
   }
 
