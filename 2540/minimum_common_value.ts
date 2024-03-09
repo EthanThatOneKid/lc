@@ -48,3 +48,8 @@ export function getCommon_oneLiner(nums1: number[], nums2: number[]): number {
       },
     ).result;
 }
+
+export function getCommon_simple(nums1: number[], nums2: number[]): number {
+  const common = new Set(nums1);
+  return nums2.find((n) => common.has(n)) ?? -1;
+}
