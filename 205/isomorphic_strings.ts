@@ -1,7 +1,5 @@
 export function isIsomorphic(s: string, t: string): boolean {
-  const cypheredS = cypher(s);
-  const cypheredT = cypher(t);
-  return cypheredS === cypheredT;
+  return cypher(s) === cypher(t);
 }
 
 function cypher(s: string): string {
