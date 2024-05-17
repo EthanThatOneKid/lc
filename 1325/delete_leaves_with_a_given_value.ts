@@ -4,14 +4,13 @@ export function removeLeafNodes(
 ): TreeNode | null {
   return root === null
     ? null
-    : ((node) =>
-      node.val === target && node.left === null && node.right === null
+    : ((left, right) =>
+      root.val === target && left === null && right === null
         ? null
-        : node)({
-        val: root.val,
-        left: removeLeafNodes(root.left, target),
-        right: removeLeafNodes(root.right, target),
-      });
+        : new TreeNode(root.val, left, right))(
+        removeLeafNodes(root.left, target),
+        removeLeafNodes(root.right, target),
+      );
 }
 
 export class TreeNode {
