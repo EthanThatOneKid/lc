@@ -15,13 +15,9 @@ export function reverseList(head: ListNode | null): ListNode | null {
     prev: ListNode | null,
     current: ListNode | null,
   ): ListNode | null {
-    if (!current) {
-      return prev;
-    }
-
-    const next = current.next;
-    current.next = prev;
-    return reverse(current, next);
+    return current !== null
+      ? reverse(new ListNode(current.val, prev), current.next)
+      : prev;
   }(null, head);
 }
 
