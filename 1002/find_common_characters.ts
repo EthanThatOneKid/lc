@@ -1,29 +1,36 @@
 export function commonChars(words: string[]): string[] {
-  const common = frequencyMapOf(words[0]);
-  for (let i = 1; i < words.length; i++) {
-    const frequencyMap = frequencyMapOf(words[i]);
-    for (const [c, frequency] of common) {
-      const nextFrequency = Math.min(frequency, frequencyMap.get(c) ?? 0);
-      if (nextFrequency === 0) {
-        common.delete(c);
-        continue;
-      }
-
-      common.set(c, nextFrequency);
-    }
-  }
-
   return Array.from(
-    common.entries(),
+    words.slice(1).reduce(
+      (common, word) =>
+        Array.from(common.entries())
+          .reduce(
+            (
+              { currentMap, frequencyMap },
+              [c, frequency],
+            ) => ({
+              currentMap: ((frequencyMap.has(c)
+                  ? Math.min(frequency, frequencyMap.get(c) ?? 0)
+                  : 0) > 0
+                ? currentMap.set(
+                  c,
+                  Math.min(frequency, frequencyMap.get(c) ?? 0),
+                )
+                : currentMap),
+              frequencyMap,
+            }),
+            {
+              currentMap: new Map(),
+              frequencyMap: word.split("").reduce(
+                (map, c) => map.set(c, (map.get(c) ?? 0) + 1),
+                new Map(),
+              ),
+            },
+          ).currentMap,
+      words[0].split("").reduce(
+        (map, c) => map.set(c, (map.get(c) ?? 0) + 1),
+        new Map(),
+      ),
+    ).entries(),
     ([c, frequency]) => new Array(frequency).fill(c),
   ).flat();
-}
-
-function frequencyMapOf(word: string): Map<string, number> {
-  const frequencyMap = new Map<string, number>();
-  for (const c of word) {
-    frequencyMap.set(c, (frequencyMap.get(c) ?? 0) + 1);
-  }
-
-  return frequencyMap;
 }
