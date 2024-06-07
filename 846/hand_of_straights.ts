@@ -3,28 +3,28 @@ export function isNStraightHand(hand: number[], groupSize: number): boolean {
     frequencyMap: Map<number, number>,
     sortedHand: number[],
   ): boolean {
-    return sortedHand.length === 0 ? true : (() => {
-      const first = sortedHand[sortedHand.length - 1];
-      return (
-          Array.from({ length: groupSize }, (_, i) => i + first).every((i) =>
-            !frequencyMap.has(i) ? false : (() => {
-              const frequency = frequencyMap.get(i)! - 1;
-              frequencyMap.set(i, frequency);
-              if (frequency === 0) {
-                if (i !== sortedHand[sortedHand.length - 1]) {
-                  return false;
-                }
-
-                sortedHand.pop();
+    return sortedHand.length === 0 ? true : (
+        Array.from(
+          { length: groupSize },
+          (_, i) => i + sortedHand[sortedHand.length - 1],
+        ).every((i) =>
+          !frequencyMap.has(i) ? false : (() => {
+            const frequency = frequencyMap.get(i)! - 1;
+            frequencyMap.set(i, frequency);
+            if (frequency === 0) {
+              if (i !== sortedHand[sortedHand.length - 1]) {
+                return false;
               }
 
-              return true;
-            })()
-          )
+              sortedHand.pop();
+            }
+
+            return true;
+          })()
         )
-        ? checkGroup(frequencyMap, sortedHand)
-        : false;
-    })();
+      )
+      ? checkGroup(frequencyMap, sortedHand)
+      : false;
   })(
     hand.reduce(
       (map, curr) => map.set(curr, (map.get(curr) ?? 0) + 1),
