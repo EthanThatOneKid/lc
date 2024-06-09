@@ -1,32 +1,35 @@
 export function isNStraightHand(hand: number[], groupSize: number): boolean {
-  if (hand.length % groupSize !== 0) {
-    return false;
-  }
+  return hand.length % groupSize !== 0 ? false : (function checkGroup(
+    frequencyMap: Map<number, number>,
+    sortedHand: number[],
+  ): boolean {
+    return sortedHand.length === 0 ? true : (
+        Array.from(
+          { length: groupSize },
+          (_, i) => i + sortedHand[sortedHand.length - 1],
+        ).every((i) =>
+          !frequencyMap.has(i) ? false : (() => {
+            const frequency = frequencyMap.get(i)! - 1;
+            frequencyMap.set(i, frequency);
+            if (frequency === 0) {
+              if (i !== sortedHand[sortedHand.length - 1]) {
+                return false;
+              }
 
-  const frequencyMap = hand.reduce((acc, curr) => {
-    return acc.set(curr, (acc.get(curr) ?? 0) + 1);
-  }, new Map<number, number>());
+              sortedHand.pop();
+            }
 
-  const queue = Array.from(frequencyMap.keys()).sort((a, b) => a - b);
-  while (queue.length > 0) {
-    const first = queue[0];
-    console.log(first);
-    for (let i = first; i < first + groupSize; i++) {
-      if (!frequencyMap.has(i)) {
-        return false;
-      }
-
-      const newFrequency = frequencyMap.get(i)! - 1;
-      frequencyMap.set(i, newFrequency);
-      if (newFrequency === 0) {
-        if (i !== first) {
-          return false;
-        }
-
-        queue.shift();
-      }
-    }
-  }
-
-  return true;
+            return true;
+          })()
+        )
+      )
+      ? checkGroup(frequencyMap, sortedHand)
+      : false;
+  })(
+    hand.reduce(
+      (map, curr) => map.set(curr, (map.get(curr) ?? 0) + 1),
+      new Map<number, number>(),
+    ),
+    Array.from(new Set(hand)).sort((a, b) => b - a),
+  );
 }
