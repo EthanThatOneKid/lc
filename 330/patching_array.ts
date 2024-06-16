@@ -5,11 +5,9 @@ function minPatches(
   i = 0,
   miss = 1,
 ): number {
-  return miss > n ? patches : minPatches(
-    nums,
-    n,
-    patches + (i >= nums.length || nums[i] > miss ? 1 : 0),
-    i + (i < nums.length && nums[i] <= miss ? 1 : 0),
-    miss + (i < nums.length && nums[i] <= miss ? nums[i] : miss),
-  );
+  return miss > n
+    ? patches
+    : (i < nums.length && nums[i] <= miss)
+    ? minPatches(nums, n, patches, i + 1, miss + nums[i])
+    : minPatches(nums, n, patches + 1, i, miss + miss);
 }
