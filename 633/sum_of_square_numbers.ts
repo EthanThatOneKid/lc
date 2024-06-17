@@ -1,16 +1,14 @@
-function judgeSquareSum(c: number): boolean {
-  let a = 0;
-  let b = Math.floor(Math.sqrt(c));
-  while (a <= b) {
-    const sum = a * a + b * b;
-    if (sum === c) {
-      return true;
-    } else if (sum < c) {
-      a++;
-    } else {
-      b--;
-    }
-  }
-
-  return false;
+function judgeSquareSum(
+  c: number,
+  lo = 0,
+  hi = Math.floor(Math.sqrt(c)),
+  sum = lo * lo + hi * hi,
+): boolean {
+  return lo > hi
+    ? false
+    : sum === c
+    ? true
+    : sum < c
+    ? judgeSquareSum(c, lo + 1, hi)
+    : judgeSquareSum(c, lo, hi - 1);
 }
