@@ -1,17 +1,18 @@
-function maxDistance(position: number[], m: number): number {
-  position.sort((a, b) => a - b);
-  let left = 1;
-  let right = position[position.length - 1] - position[0];
-  while (left < right) {
-    const mid = Math.floor((left + right) / 2);
-    if (check(position, mid, m)) {
-      left = mid + 1;
-    } else {
-      right = mid;
-    }
+function maxDistance(
+  position: number[],
+  m: number,
+  sortedPosition = position.sort((a, b) => a - b),
+  lo = 1,
+  hi = sortedPosition[sortedPosition.length - 1] - sortedPosition[0],
+  mid = ~~((lo + hi) * 0.5),
+): number {
+  if (lo >= hi) {
+    return lo - 1;
   }
 
-  return left - 1;
+  return check(sortedPosition, mid, m)
+    ? maxDistance(position, m, sortedPosition, mid + 1, hi)
+    : maxDistance(position, m, sortedPosition, lo, mid);
 }
 
 /**
