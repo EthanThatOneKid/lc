@@ -3,27 +3,30 @@ function maxSatisfied(
     grumpy: number[],
     minutes: number,
 ): number {
-    // WIP: https://pastebin.com/7KMD2vWW
-    const { satisfied, maxSatisfied } = customers.reduce(
-        ({ satisfied, maxSatisfied, windowSatisfied }, customer, i) => {
-            if (grumpy[i] === 0) {
-                satisfied += customer;
-            } else {
-                windowSatisfied += customer;
-            }
-
-            if (i >= minutes) {
-                windowSatisfied -= grumpy[i - minutes] * customers[i - minutes];
-            }
-
-            return {
-                satisfied,
-                maxSatisfied: Math.max(maxSatisfied, windowSatisfied),
-                windowSatisfied,
-            };
-        },
-        { satisfied: 0, maxSatisfied: 0, windowSatisfied: 0 },
+    return (({ satisfied, recordSatisfied }) => satisfied + recordSatisfied)(
+        customers.reduce(
+            (
+                {
+                    satisfied: previousSatisfied,
+                    windowSatisfied: previousWindowSatisfied,
+                    recordSatisfied: previousRecordSatisfied,
+                },
+                customer,
+                i,
+                _,
+                satisfied = previousSatisfied +
+                    (grumpy[i] === 0 ? customer : 0),
+                windowSatisfied = previousWindowSatisfied +
+                    (grumpy[i] !== 0 ? customer : 0) -
+                    (i >= minutes
+                        ? grumpy[i - minutes] * customers[i - minutes]
+                        : 0),
+                recordSatisfied = Math.max(
+                    previousRecordSatisfied,
+                    windowSatisfied,
+                ),
+            ) => ({ satisfied, windowSatisfied, recordSatisfied }),
+            { satisfied: 0, recordSatisfied: 0, windowSatisfied: 0 },
+        ),
     );
-
-    return satisfied + maxSatisfied;
 }
