@@ -12,27 +12,25 @@
  * }
  */
 
-function balanceBST(root: TreeNode | null): TreeNode | null {
-  return bstFromArray(toArray(root));
-}
-
-function bstFromArray(
-  values: number[],
-  lo = 0,
-  hi = values.length - 1,
-  mid = lo + Math.floor((hi - lo) * 0.5),
+function balanceBST(
+  root: TreeNode | null,
 ): TreeNode | null {
-  return lo > hi ? null : new TreeNode(
-    values[mid],
-    bstFromArray(values, lo, mid - 1),
-    bstFromArray(values, mid + 1, hi),
-  );
-}
-
-function toArray(node: TreeNode | null): number[] {
-  return node === null ? [] : [
-    ...toArray(node.left),
-    node.val,
-    ...toArray(node.right),
-  ];
+  return (function bstFromArray(
+    values: number[],
+    lo = 0,
+    hi = values.length - 1,
+    mid = lo + ~~((hi - lo) * 0.5),
+  ): TreeNode | null {
+    return lo > hi ? null : new TreeNode(
+      values[mid],
+      bstFromArray(values, lo, mid - 1),
+      bstFromArray(values, mid + 1, hi),
+    );
+  })((function toArray(node: TreeNode | null): number[] {
+    return node === null ? [] : [
+      ...toArray(node.left),
+      node.val,
+      ...toArray(node.right),
+    ];
+  })(root));
 }
