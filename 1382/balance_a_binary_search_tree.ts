@@ -18,27 +18,19 @@ function balanceBST(root: TreeNode | null): TreeNode | null {
 
 function bstFromArray(
   values: number[],
-  left = 0,
-  right = values.length - 1,
-  mid = left + ~~((right - left) * 0.5),
+  lo = 0,
+  hi = values.length - 1,
+  mid = lo + Math.floor((hi - lo) * 0.5),
 ): TreeNode | null {
-  if (left > right) {
-    return null;
-  }
-
-  return new TreeNode(
+  return lo > hi ? null : new TreeNode(
     values[mid],
-    bstFromArray(values, left, mid - 1),
-    bstFromArray(values, mid + 1, right),
+    bstFromArray(values, lo, mid - 1),
+    bstFromArray(values, mid + 1, hi),
   );
 }
 
 function toArray(node: TreeNode | null): number[] {
-  if (!node) {
-    return [];
-  }
-
-  return [
+  return node === null ? [] : [
     ...toArray(node.left),
     node.val,
     ...toArray(node.right),
