@@ -1,6 +1,6 @@
 function survivedRobotsHealths(
-    positions: number[],
-    healths: number[],
-    directions: string,
+  positions: number[],
+  healths: number[],
+  directions: string,
 ): number[] {
 }
