@@ -13,17 +13,16 @@
  */
 function delNodes(
   root: TreeNode | null,
-  to_delete: number[],
+  toDelete: number[],
+  deletedSet = new Set(toDelete),
+  result: Array<TreeNode | null> = [],
 ): Array<TreeNode | null> {
-  const result: Array<TreeNode | null> = [];
-  const set = new Set(to_delete);
-
-  function dfs(node: TreeNode | null, isRoot: boolean): TreeNode | null {
+  function dfs(node: TreeNode | null, isRoot = true): TreeNode | null {
     if (!node) {
       return null;
     }
 
-    const isDeleted = set.has(node.val);
+    const isDeleted = deletedSet.has(node.val);
     if (isRoot && !isDeleted) {
       result.push(node);
     }
@@ -33,6 +32,6 @@ function delNodes(
     return isDeleted ? null : node;
   }
 
-  dfs(root, true);
+  dfs(root);
   return result;
 }
