@@ -1,10 +1,13 @@
 function luckyNumbers(matrix: number[][]): number[] {
-  const rows = matrix.map((row) => Math.min(...row));
-  const cols = Array.from(
-    { length: matrix[0].length },
-    (_, i) => Math.max(...matrix.map((row) => row[i])),
+  return Array.from(
+    new Set(matrix.map((row) => Math.min(...row)))
+      .intersection(
+        new Set(Array.from(
+          { length: matrix[0].length },
+          (_, i) => Math.max(...matrix.map((row) => row[i])),
+        )),
+      ),
   );
-  return Array.from(new Set(rows).intersection(new Set(cols)));
 }
 
 declare global {
