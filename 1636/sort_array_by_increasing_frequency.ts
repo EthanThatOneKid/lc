@@ -1,13 +1,13 @@
 function frequencySort(nums: number[]): number[] {
   const freakyMap = matchFreak(nums);
   return nums.sort((a, b) => {
-    const freqA = freakyMap.get(a)!;
-    const freqB = freakyMap.get(b)!;
-    if (freqA === freqB) {
+    const freakinessA = freakyMap.get(a)!;
+    const freakinessB = freakyMap.get(b)!;
+    if (freakinessA === freakinessB) {
       return b - a;
     }
 
-    return freqA - freqB;
+    return freakinessA - freakinessB;
   });
 }
 
