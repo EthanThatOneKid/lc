@@ -2,11 +2,11 @@ function sortJumbled(mapping: number[], nums: number[]): number[] {
   return nums
     .map((n, i) => [
       fromDigits(digitsOf(n).map((d) => mapping[d])),
-      n,
       i,
+      n,
     ])
-    .sort(([a0, _, a2], [b0, __, b2]) => a0 - b0 !== 0 ? a0 - b0 : a2 - b2)
-    .map(([, n]) => n);
+    .sort(([a0, a1], [b0, b1]) => a0 - b0 !== 0 ? a0 - b0 : a1 - b1)
+    .map(({ 2: n }) => n);
 }
 
 function digitsOf(n: number): number[] {
