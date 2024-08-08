@@ -1,6 +1,6 @@
 # lc
 
-Collection of Leetcode solutions.
+Collection of (primarily TypeScript) Leetcode solutions.
 
 ---
 
