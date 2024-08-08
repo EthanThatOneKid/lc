@@ -1,48 +1,56 @@
 function spiralMatrixIII(
   rows: number,
-  cols: number,
-  rStart: number,
-  cStart: number,
+  columns: number,
+  row: number,
+  column: number,
+  direction = 0,
+  distance = 1,
+  previousDistance = 0,
+  result: [number, number][] = [],
 ): number[][] {
-  let r = rStart;
-  let c = cStart;
-  let direction = 0;
-  let distance = 1;
-  let previousDistance = 0;
+  if (result.length === rows * columns) {
+    return result;
+  }
 
-  const result: [number, number][] = [];
-  while (result.length < rows * cols) {
-    for (let i = 0; i < distance; i++) {
-      if (r >= 0 && r < rows && c >= 0 && c < cols) {
-        result.push([r, c]);
-      }
-
-      switch (direction) {
-        case 0:
-          c++;
-          break;
-        case 1:
-          r++;
-          break;
-        case 2:
-          c--;
-          break;
-        case 3:
-          r--;
-          break;
-      }
+  for (let i = 0; i < distance; i++) {
+    if (row >= 0 && row < rows && column >= 0 && column < columns) {
+      result.push([row, column]);
     }
 
-    direction = (direction + 1) % 4;
-
-    if (direction % 2 === 0) {
-      distance++;
-    }
-
-    if (direction === 0) {
-      previousDistance++;
+    switch (direction) {
+      case 0:
+        column++;
+        break;
+      case 1:
+        row++;
+        break;
+      case 2:
+        column--;
+        break;
+      case 3:
+        row--;
+        break;
     }
   }
 
-  return result;
+  direction = (direction + 1) % 4;
+
+  if (direction % 2 === 0) {
+    distance++;
+  }
+
+  if (direction === 0) {
+    previousDistance++;
+  }
+
+  return spiralMatrixIII(
+    rows,
+    columns,
+    row,
+    column,
+    direction,
+    distance,
+    previousDistance,
+    result,
+  );
 }
