@@ -1,11 +1,13 @@
 function productExceptSelf(nums: number[]): number[] {
-  // https://leetcode.com/problems/product-of-array-except-self/
-  return applySuffixArray(nums, makePrefixArray(nums));
+  return computeProductSuffixArray(
+    nums,
+    makeProductPrefixArray(nums),
+  );
 }
 
-function makePrefixArray(nums: number[]): number[] {
+function makeProductPrefixArray(nums: number[]): number[] {
   return nums.reduce((result, n, i) => {
-    if (i > nums.length - 1) {
+    if (i > nums.length - 2) {
       return result;
     }
 
@@ -14,9 +16,25 @@ function makePrefixArray(nums: number[]): number[] {
   }, [1]);
 }
 
-function applySuffixArray(nums: number[], prefixArray: number[]): number[] {
-  return nums.reduceRight((result, _, _i) => {
-    // WIP https://youtube.com/watch?v=bNvIQI2wAjk
-    return result;
-  }, prefixArray);
+function computeProductSuffixArray(
+  nums: number[],
+  prefixArray: number[],
+): number[] {
+  let productSuffix = 1;
+  for (let i = nums.length - 1; i >= 0; i--) {
+    prefixArray[i] *= productSuffix;
+    productSuffix *= nums[i];
+  }
+
+  return prefixArray;
+}
+
+// deno run 238/product_of_array_except_self.ts
+if (import.meta.main) {
+  const nums = [1, 2, 3, 4];
+  const computedSuffixArray = computeProductSuffixArray(
+    nums,
+    makeProductPrefixArray(nums),
+  );
+  console.log({ computedSuffixArray });
 }
