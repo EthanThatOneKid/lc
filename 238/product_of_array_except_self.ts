@@ -6,14 +6,12 @@ function productExceptSelf(nums: number[]): number[] {
 }
 
 function makeProductPrefixArray(nums: number[]): number[] {
-  return nums.reduce((result, n, i) => {
-    if (i > nums.length - 2) {
-      return result;
-    }
+  const prefixArray = [1];
+  for (let i = 0; i < nums.length - 1; i++) {
+    prefixArray.push(prefixArray[i] * nums[i]);
+  }
 
-    result.push(result[i] * n);
-    return result;
-  }, [1]);
+  return prefixArray;
 }
 
 function computeProductSuffixArray(
