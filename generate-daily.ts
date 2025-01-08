@@ -8,8 +8,7 @@ if (import.meta.main) {
   const directory = dailyQuestion.number.toString().padStart(4, "0");
   await Deno.mkdir(directory);
 
-  const filename = dailyQuestion.title.toLowerCase().replace(/[^a-z0-9]/g, "_");
   const code =
     `// Title: ${dailyQuestion.number}. ${dailyQuestion.title}\n// URL: ${dailyQuestion.url}\n// Difficulty: ${dailyQuestion.difficulty}\n// Date: ${dailyQuestion.date}\n`;
-  await Deno.writeTextFile(`${directory}/${filename}.ts`, code);
+  await Deno.writeTextFile(`${directory}/solution.ts`, code);
 }

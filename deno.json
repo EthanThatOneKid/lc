@@ -1,7 +1,7 @@
 {
   "lock": false,
   "tasks": {
-    "fmt": "deno fmt && deno run -A fmt-directories.ts",
+    "fmt": "deno fmt && deno run -A format-dailies.ts",
     "generate": "deno run -A generate-daily.ts"
   }
 }
