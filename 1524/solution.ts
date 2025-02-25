@@ -1,24 +1,26 @@
 function numOfSubarrays(arr: number[], limit = 10 ** 9 + 7): number {
-  let oddSums = 0;
-  for (const [start, end] of subarrays(arr)) {
-    let sum = 0;
-    for (let i = start; i < end; i++) {
-      sum += arr[i];
-    }
-    if (sum % 2 === 0) {
-      continue;
-    }
+  // We'll keep track of the counts of even and odd prefix sums
+  let evenCount = 1; // Start with 1 to account for empty prefix
+  let oddCount = 0;
+  let prefixSum = 0;
+  let result = 0;
 
-    oddSums = (oddSums + 1) % limit;
+  for (const num of arr) {
+    // Update running prefix sum
+    prefixSum = (prefixSum + num) % 2;
+
+    if (prefixSum === 1) {
+      // Current prefix sum is odd
+      // Add count of even prefix sums seen so far
+      result = (result + evenCount) % limit;
+      oddCount++;
+    } else {
+      // Current prefix sum is even
+      // Add count of odd prefix sums seen so far
+      result = (result + oddCount) % limit;
+      evenCount++;
+    }
   }
 
-  return oddSums;
-}
-
-function* subarrays(arr: number[]): Generator<[number, number]> {
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = i; j < arr.length; j++) {
-      yield [i, j + 1];
-    }
-  }
+  return result;
 }
