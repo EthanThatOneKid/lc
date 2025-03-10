@@ -7,13 +7,13 @@ function maxAbsoluteSum(nums: number[]): number {
       __,
       currentSum = sum + num,
       currentMax = Math.max(max, currentSum),
-      currentMin = Math.min(min, currentSum)
+      currentMin = Math.min(min, currentSum),
     ) => ({
       max: currentMax,
       min: currentMin,
       sum: currentSum,
       absoluteSum: currentMax - currentMin,
     }),
-    { max: 0, min: 0, sum: 0, absoluteSum: 0 }
+    { max: 0, min: 0, sum: 0, absoluteSum: 0 },
   ).absoluteSum;
 }
