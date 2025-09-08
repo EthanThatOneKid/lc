@@ -1,44 +1,40 @@
 function groupAnagrams(strs: string[]): string[][] {
-  const anagrams = new Map<string, string[]>();
-  for (const s of strs) {
-    const key = encodeFreaky(makeFreaky(s));
-    const group = anagrams.get(key) ?? [];
-    group.push(s);
-    anagrams.set(key, group);
+  return Object.values(Object.groupBy(
+    strs,
+    (str) => serializeFrequencyMap(makeFrequencyMap(str)),
+  ) as Record<string, string[]>);
+}
+
+function serializeFrequencyMap(frequencyMap: Map<string, number>) {
+  return Array.from(frequencyMap.keys()).toSorted().reduce(
+    (result, char) => result + `${char}${frequencyMap.get(char)}`,
+    "",
+  );
+}
+
+function makeFrequencyMap(str: string): Map<string, number> {
+  const frequencyMap = new Map<string, number>();
+  for (const char of str) {
+    const frequency = (frequencyMap.get(char) ?? 0) + 1;
+    frequencyMap.set(char, frequency);
   }
 
-  return Array.from(anagrams.values());
+  return frequencyMap;
 }
 
-function encodeFreaky(freaky: Map<string, number>): string {
-  return Array.from(freaky.keys())
-    .toSorted()
-    .map((k) => `${k}:${freaky.get(k)}`)
-    .join(",");
-}
-
-function makeFreaky(s: string): Map<string, number> {
-  const freaky = new Map<string, number>();
-  for (const c of s) {
-    freaky.set(
-      c,
-      (freaky.get(c) ?? 0) + 1,
-    );
-  }
-
-  return freaky;
-}
-
-// Polyfill for Array.prototype.toSorted method.
-Array.prototype.toSorted = function <T>(
-  this: T[],
-  compareFn?: (a: T, b: T) => number,
-): T[] {
-  return this.slice().sort(compareFn);
-};
-
-declare global {
-  interface Array<T> {
-    toSorted(compareFn?: (a: T, b: T) => number): T[];
-  }
-}
+// function equals(f1: Map<string, number>, f2: Map<string, number>): boolean {
+//   if (f1.size !== f2.size) {
+//     return false;
+//   }
+//
+//   for (const [key, frequency] of f1) {
+//     if (f2.get(key) === frequency) {
+//       continue;
+//     }
+//
+//     return false;
+//   }
+//
+//   return true;
+// }
+//
