@@ -4,33 +4,55 @@
 // else, return "";
 
 function spellchecker(wordlist: string[], queries: string[]): string[] {
-  return queries.map((query) => spellcheck(wordlist, query));
-}
+  const exact = new Map<string, string>();
+  const caseInsensitive = new Map<string, string>();
+  const misspelled = new Map<string, string>();
 
-function spellcheck(wordlist: string[], query: string): string {
-  for (const fn of [matches, matchesCaseInsensitive, matchesMisspelled]) {
-    // TODO: This for-loop for a O(1) lookup.
-    for (const word of wordlist) {
-      if (!fn(word, query)) {
-        continue;
-      }
+  for (const word of wordlist) {
+    const exactKey = makeExact(word);
+    if (!exact.has(exactKey)) {
+      exact.set(exactKey, word);
+    }
 
-      return word;
+    const caseKey = makeCaseInsensitive(word);
+    if (!caseInsensitive.has(caseKey)) {
+      caseInsensitive.set(caseKey, word);
+    }
+
+    const misspelledKey = makeMisspelled(word);
+    if (!misspelled.has(misspelledKey)) {
+      misspelled.set(misspelledKey, word);
     }
   }
 
-  return "";
+  const rules: Array<[((word: string) => string), Map<string, string>]> = [
+    [makeExact, exact],
+    [makeCaseInsensitive, caseInsensitive],
+    [makeMisspelled, misspelled],
+  ];
+
+  return queries.map((query) => {
+    for (const [fn, map] of rules) {
+      const match = map.get(fn(query));
+      if (!match) {
+        continue;
+      }
+
+      return match;
+    }
+
+    return "";
+  });
 }
 
-function matches(word: string, query: string): boolean {
-  return word === query;
+function makeExact(word: string) {
+  return word;
 }
 
-function matchesCaseInsensitive(word: string, query: string): boolean {
-  return word.toLowerCase() === query.toLowerCase();
+function makeCaseInsensitive(word: string) {
+  return word.toLowerCase();
 }
 
-function matchesMisspelled(word: string, query: string): boolean {
-  return word.toLowerCase().replaceAll(/[aeiou]/g, "*") ===
-    query.toLowerCase().replaceAll(/[aeiou]/g, "*");
+function makeMisspelled(word: string) {
+  return makeCaseInsensitive(word).replaceAll(/[aeiou]/g, "*");
 }
